@@ -35,9 +35,7 @@ jobs:
           cache: "pip"
 
       - name: Install Python dependencies
-        run: |
-          cd scraper
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install Playwright browsers
         run: playwright install chromium --with-deps
@@ -47,7 +45,6 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          cd scraper
           if [ -n "${{ github.event.inputs.scraper }}" ]; then
             python orchestrator.py --only ${{ github.event.inputs.scraper }}
           else
@@ -60,9 +57,9 @@ jobs:
         with:
           name: scraper-output-${{ github.run_id }}
           path: |
-            scraper/akasaair/*.json
-            scraper/spicejet/*.json
-            scraper/airindiaexpress/*.json
+            akasaair/*.json
+            spicejet/*.json
+            airindiaexpress/*.json
           retention-days: 30
           if-no-files-found: warn
 
@@ -71,6 +68,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: run-log-${{ github.run_id }}
-          path: scraper/.dist/logs/*.json
+          path: .dist/logs/*.json
           retention-days: 30
           if-no-files-found: warn
